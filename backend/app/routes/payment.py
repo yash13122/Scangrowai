@@ -1,5 +1,8 @@
 from fastapi import APIRouter
-from app.flow.ingestion import ingest
+from backend.app.db import SessionLocal
+from backend.app.models import Transaction
+from ..flow.ingestion import ingest
+import uuid
 
 router = APIRouter()
 
@@ -22,4 +25,17 @@ def confirm(data: dict):
     ingest(event)
     TRANSACTIONS.append(event)
 
-    return {"status": "saved"}
+    db = SessionLocal()
+    try:
+        txn = Transaction(
+            id=str(uuid.uuid4()),
+            store_id=event["store_id"],
+            amount=event["amount"],
+            status="confirmed"
+        )
+        db.add(txn)
+        db.commit()
+    finally:
+        db.close()
+
+    return {"status": "saved", "transaction_id": txn.id}

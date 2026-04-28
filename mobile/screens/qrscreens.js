@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { View, Text, Button, TextInput, StyleSheet, Alert } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import * as Linking from "expo-linking";
+import { BACKEND_URL } from "../config";
 
 export default function QRScreen() {
   const [hasPermission, setHasPermission] = useState(null);
@@ -29,13 +30,11 @@ export default function QRScreen() {
     }
 
     try {
-      const res = await fetch(
-        `http://YOUR_BACKEND_URL/pay/${storeId}?amount=${amount}`
-      );
+      const res = await fetch(`${BACKEND_URL}/pay/${storeId}?amount=${amount}`);
       const json = await res.json();
 
-      if (json.upi_link) {
-        Linking.openURL(json.upi_link);
+      if (json.upi) {
+        Linking.openURL(json.upi);
       } else {
         Alert.alert("Error", "Payment link not received");
       }
@@ -46,11 +45,19 @@ export default function QRScreen() {
   };
 
   if (hasPermission === null) {
-    return <Text>Requesting camera permission...</Text>;
+    return (
+      <View style={styles.center}>
+        <Text>Requesting camera permission...</Text>
+      </View>
+    );
   }
 
   if (hasPermission === false) {
-    return <Text>No access to camera</Text>;
+    return (
+      <View style={styles.center}>
+        <Text>No access to camera</Text>
+      </View>
+    );
   }
 
   return (
@@ -63,7 +70,7 @@ export default function QRScreen() {
       ) : (
         <View style={styles.form}>
           <Text style={styles.label}>Store ID:</Text>
-          <Text>{storeId}</Text>
+          <Text style={styles.storeId}>{storeId}</Text>
 
           <TextInput
             style={styles.input}
@@ -75,11 +82,13 @@ export default function QRScreen() {
 
           <Button title="Pay Now" onPress={handlePayment} />
 
+          <View style={styles.spacer} />
           <Button
             title="Scan Again"
             onPress={() => {
               setScanned(false);
               setStoreId(null);
+              setAmount("");
             }}
           />
         </View>
@@ -91,20 +100,37 @@ export default function QRScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#000",
+  },
+  center: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 16,
   },
   form: {
     flex: 1,
     justifyContent: "center",
     padding: 20,
+    backgroundColor: "#ffffff",
   },
   label: {
     fontWeight: "bold",
     marginBottom: 5,
   },
+  storeId: {
+    marginBottom: 16,
+    fontSize: 16,
+    color: "#111827",
+  },
   input: {
     borderWidth: 1,
+    borderColor: "#d1d5db",
     padding: 10,
     marginVertical: 10,
     borderRadius: 8,
+  },
+  spacer: {
+    height: 12,
   },
 });
