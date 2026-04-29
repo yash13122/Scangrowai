@@ -26,3 +26,24 @@ def dashboard(store_id: str):
         "ai": agents,
         "final": final
     }
+
+@router.get("/dashboard/demo")
+def dashboard_demo():
+    demo_events = [
+        {"store_id": "demo", "amount": 120.0},
+        {"store_id": "demo", "amount": 300.0},
+        {"store_id": "demo", "amount": 650.0},
+    ]
+
+    processed = processor.process(demo_events)
+    inf = inference.inference(processed)
+    bi = bi_layer.build_bi(inf)
+    agents = ai_agents.run_agents(bi)
+    rag = rag_engine.rag(agents)
+    final = recommendations.recommend(rag)
+
+    return {
+        "bi": bi,
+        "ai": agents,
+        "final": final
+    }

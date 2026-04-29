@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, Button, TextInput, StyleSheet, Alert } from "react-native";
+import { View, Text, Button, TextInput, StyleSheet, Alert, Platform } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import * as Linking from "expo-linking";
-import { BACKEND_URL } from "../config";
+import { BACKEND_URL, isWeb } from "../config";
 
 export default function QRScreen() {
   const [hasPermission, setHasPermission] = useState(null);
@@ -34,7 +34,11 @@ export default function QRScreen() {
       const json = await res.json();
 
       if (json.upi) {
-        Linking.openURL(json.upi);
+        if (isWeb || Platform.OS === "web") {
+          window.open(json.upi, "_blank");
+        } else {
+          Linking.openURL(json.upi);
+        }
       } else {
         Alert.alert("Error", "Payment link not received");
       }

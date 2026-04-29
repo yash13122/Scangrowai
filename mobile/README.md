@@ -18,13 +18,17 @@ A React Native mobile app for ScanGrow AI platform owners to manage their busine
 
 2. Start the development server:
    ```bash
-   npm start
+   npm start -- --port 8082 --tunnel --clear
    ```
 
-3. Run on device/emulator:
-   - For iOS: `npm run ios`
+3. Run on device/emulator/browser:
+   - For a physical iPad with Expo Go: use the QR code shown in the terminal after `npm start`
    - For Android: `npm run android`
-   - For Web: `npm run web`
+   - For Web browser: `npm run web -- --port 8082`
+
+> Note: `npm run ios` only works on macOS with Xcode installed. Use Expo Go on your iPad or run the web version in your browser instead.
+
+> This app has been updated to Expo SDK 54.0.0 so it works with newer Expo Go versions and iOS simulator workflows.
 
 ## Backend Connection
 

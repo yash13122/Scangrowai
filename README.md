@@ -7,7 +7,7 @@ A full-stack AI-powered platform for small business owners to manage revenue tra
 - **Backend**: FastAPI (Python) with AI processing pipeline
 - **Mobile**: React Native (Expo) with QR scanning and dashboard
 - **Web**: Simple payment interface
-- **Database**: PostgreSQL (via SQLAlchemy)
+- **Database**: SQLite via SQLAlchemy
 
 ## 🚀 Quick Start
 
@@ -15,16 +15,15 @@ A full-stack AI-powered platform for small business owners to manage revenue tra
 - Python 3.12+
 - Node.js 18+
 - npm or yarn
-- PostgreSQL (optional, uses in-memory storage by default)
 
 ### 1. Backend Setup
 ```bash
 # Install Python dependencies
 cd backend/app
-pip install -r requirements.txt
+python3 -m pip install -r requirements.txt
 
 # Start backend server
-python -m uvicorn main:app --reload
+python3 -m uvicorn main:app --reload --host 0.0.0.0 --port 8000
 ```
 
 ### 2. Mobile App Setup
@@ -33,18 +32,43 @@ python -m uvicorn main:app --reload
 cd mobile
 npm install
 
-# Start Expo development server
-npm start
+# Start Expo development server for a physical iPad or device
+npm start -- --port 8082 --tunnel --clear
 ```
+
+### Physical iPad / Expo Go
+Use Expo Go on your iPad and scan the QR code shown in the terminal. Do not use `npm run ios` for a physical iPad; that command is only for macOS simulator environments.
+
+### Browser / Web
+If you want to use the mobile app in a browser later, run:
+```bash
+cd mobile
+npm run web -- --port 8082
+```
+
+### iOS Simulator (macOS only)
+```bash
+cd mobile
+npm run ios
+```
+
+> The mobile app is now upgraded to Expo SDK 54.0.0, which is compatible with newer Expo Go versions and iOS simulators.
 
 ### 3. Run Everything
 ```bash
-# From project root - starts both backend and mobile
+# From project root - starts backend, creates the local DB, and starts Expo mobile
 ./run-all.sh
 
-# Or run individually:
-./run-mobile.sh  # Mobile app only
+# Or run mobile only after starting the backend
+./run-mobile.sh
+
+# Run the mobile app in a browser using Expo web
+./run-web.sh
 ```
+
+> The backend uses SQLite by default and creates `scangrow.db` automatically in the project root.
+
+> If using a physical device with Expo Go, make sure the mobile app can connect to the backend host on your local network. Update `mobile/config.js` with the device-accessible IP if needed.
 
 ## 📱 Features
 

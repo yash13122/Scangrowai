@@ -15,7 +15,19 @@ export default function Insights() {
       setError(null);
     } catch (err) {
       console.log("Error fetching insights:", err);
-      setError("Unable to load dashboard data. Check backend URL and network.");
+      setData({
+        bi: {
+          kpis: { total: 1070, avg: 356.67, trend: "growth" },
+          charts: ["revenue", "frequency", "peak time"],
+        },
+        ai: [
+          "Increase bundle offers",
+          "Optimize peak hour pricing",
+          "Suggest inventory restock",
+        ],
+        final: { actions: ["Increase bundle offers", "Optimize peak hour pricing", "Suggest inventory restock"] },
+      });
+      setError("Unable to reach backend. Showing demo insights instead.");
     }
   };
 

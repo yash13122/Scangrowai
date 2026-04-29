@@ -1,5 +1,7 @@
 {
   "expo": {
+    "sdkVersion": "54.0.0",
+    "entryPoint": "node_modules/expo/AppEntry.js",
     "name": "ScanGrow Mobile",
     "slug": "scangrow-mobile",
     "version": "1.0.0",
